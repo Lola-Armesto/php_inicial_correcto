@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
+		
+	</head>
+	<body>
+		<div id="navegacion"><p><label><a href="../../index.html">Volver a inicio</a></label></p></div>
+	
+		<form method="post" id="dataform">
+			<p>Introduce datos</p>
+			<p>Matricula: <input type="text" name="matricula" id="matricula" placeholder="Introduce matricula" required="required"></p>
+			<p>Marca: <input type="text" name="marca" id="marca" placeholder="Introduce marca" required="required"></p>
+			<p>Modelo: <input type="text" name="modelo" id="modelo" placeholder="Introduce modelo" required="required"></p>
+			<p>Color: <input type="text" name="color" id="color" placeholder="Introduce color" required="required"></p>
+			<p>Precio: <input type="number" name="precio" id="precio" placeholder="Introduce precio" required="required"></p>	
+			<p><button id="enviarForm">Enviar</button>
+			<button onclick="clean()">Limpiar</button></p>
+
+		</form>
+
+		<p id="resultado"></p>
+	
+	<script type="text/javascript" language="javascript">
+		
+	function validaForm(){
+    // Campos de texto
+    if($("#matricula").val() == ""){
+        alert("El campo Matricula no puede estar vacío.");
+        $("#matricula").focus();       // Esta función coloca el foco de escritura del usuario en el campo Nombre directamente.
+        return false;
+    }
+    if($("#marca").val() == ""){
+        alert("El campo Marca no puede estar vacío.");
+        $("#marca").focus();
+        return false;
+    }
+    if($("#modelo").val() == ""){
+        alert("El campo Modelo no puede estar vacío.");
+        $("#modelo").focus();
+        return false;
+    }
+    if($("#color").val() == ""){
+        alert("El campo Color no puede estar vacío.");
+        $("#color").focus();
+        return false;
+    }
+    if($("#precio").val() == ""){
+        alert("El campo Precio no puede estar vacío.");
+        $("#precio").focus();
+        return false;
+    }	
+   
+
+    return true; // Si todo está correcto
+	}
+
+		$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
+			$("#enviarForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+				if(validaForm()){     
+
+		// Primero validará el formulario.
+			e.preventDefault();
+					$.ajax({
+						type:"POST",
+						url: '../config/datos.php',
+						data: $("#dataform").serialize(),
+						success: function(response){
+								var jsonData = JSON.parse(response);
+								genera_tabla(jsonData);
+								
+							
+						}
+						
+					});
+				}     
+
+		});
+		});	
+		
+
+		
+		function genera_tabla(data) {
+			if(data[0].code < 0){
+				console.log(data.length);
+				resultado.innerHTML = data[0].message;
+
+			}else{
+
+				// Obtener la referencia del elemento body
+		var body = document.getElementsByTagName("body")[0];
+
+		// Crea un elemento <table> y un elemento <tbody>
+		var tabla   = document.createElement("table");
+		
+		var tblheader = document.createElement("thead");
+		var tblBody = document.createElement("tbody");
+		var cabecera = document.createElement("tr");
+		
+				var celda = document.createElement("th");
+				var textoCelda = document.createTextNode("MATRICULA");
+				celda.appendChild(textoCelda);
+				cabecera.appendChild(celda);
+
+				var celda = document.createElement("th");
+				var textoCelda = document.createTextNode("MARCA");
+				celda.appendChild(textoCelda);
+				cabecera.appendChild(celda);
+				
+				var celda = document.createElement("th");
+				var textoCelda = document.createTextNode("MODELO");
+				celda.appendChild(textoCelda);
+				cabecera.appendChild(celda);
+				
+				var celda = document.createElement("th");
+				var textoCelda = document.createTextNode("COLOR");
+				celda.appendChild(textoCelda);
+				cabecera.appendChild(celda);
+				
+				var celda = document.createElement("th");
+				var textoCelda = document.createTextNode("PRECIO");
+				celda.appendChild(textoCelda);
+				cabecera.appendChild(celda);
+				
+				tblheader.appendChild(cabecera);
+		// Crea las celdas
+		for (var i = 0; i < data.length; i++) {
+			// Crea las hileras de la tabla
+			var hilera = document.createElement("tr");
+
+				var celda = document.createElement("td");
+				var textoCelda = document.createTextNode(data[i].matricula);
+				celda.appendChild(textoCelda);
+				hilera.appendChild(celda);
+				
+				var celda = document.createElement("td");
+				var textoCelda = document.createTextNode(data[i].marca);
+				celda.appendChild(textoCelda);
+				hilera.appendChild(celda);
+				
+				var celda = document.createElement("td");
+				var textoCelda = document.createTextNode(data[i].modelo);
+				celda.appendChild(textoCelda);
+				hilera.appendChild(celda);
+				
+				var celda = document.createElement("td");
+				var textoCelda = document.createTextNode(data[i].color);
+				celda.appendChild(textoCelda);
+				hilera.appendChild(celda);
+				
+				var celda = document.createElement("td");
+				var textoCelda = document.createTextNode(data[i].precio);
+				celda.appendChild(textoCelda);
+				hilera.appendChild(celda);
+				
+
+			// agrega la hilera al final de la tabla (al final del elemento tblbody)
+			tblBody.appendChild(hilera);
+		}
+		// posiciona el <thead> debajo del elemento <table>
+		tabla.appendChild(tblheader);
+		// posiciona el <tbody> debajo del elemento <thead>
+		tabla.appendChild(tblBody);
+		// appends <table> into <body>
+		body.appendChild(tabla);
+		// modifica el atributo "border" de la tabla y lo fija a "2";
+		tabla.setAttribute("border", "2");
+
+		}
+	}
+		function clean(){
+			document.getElementById("matricula").value = '';
+			document.getElementById("marca").value = '';
+			document.getElementById("modelo").value = '';
+			document.getElementById("color").value = '';
+			document.getElementById("precio").value ='';
+			location.reload();
+			}
+	
+	</script>
+
+	</body>
+</html>

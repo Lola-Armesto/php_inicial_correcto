@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		
+	</head>
+	<body>
+		<form method="post" id="upform">
+		<p> Indroduce email: <input type="email" name="mailup" id="mailup" placeholder="Indroduce mail" required="required"></p>
+		<p><button id="enviarForm">Buscar Registro</button></p><a href="crudup.php?var=$mail">Paso Variable</a>
+	</form> 
+
+		<p id="resultado">
+			
+			<h3>Estos son los datos de este cliente. </h3>
+				<ul>
+				<li>Nombre : 	<input type = "text" id = "nom" readonly></li>
+				<li>Apellidos : <input type = "text" id = "ape" readonly></li>
+				<li>Direccion : <input type = "text" id = "dir" readonly></li>
+				<li>Telefono : 	<input type = "text" id = "tel" readonly></li>
+				<li>Email : 	<input type = "text" id = "mail" readonly></li>
+
+				</ul>
+
+			
+			
+		</p>
+		<p>
+			<form method="post" id="upupform">
+				<p>Nombre : 	<input type = "text" name = "nom" id = "nom" required="required"></p>
+				<p>Apellidos :  <input type = "text" name = "ape" id = "ape" required="required"></p>
+				<p>Direccion :  <input type = "text" name = "dir" id = "dir" required="required"></p>
+				<p>Telefono : 	<input type = "text" name = "tel" id = "tel" required="required"></p>
+				<p>Email : 		<input type = "text" name = "mail" id = "mail" required="required"></p>
+				<p><button id = "enviarFormUP">Modificar Datos</button></p>
+
+			
+			</form>	
+		</p>
+
+		<script type="text/javascript" language="javascript">
+
+			function validaUpForm(){
+					if($("#mailup").val() == ""){
+								alert("El campo Email no puede estar vacío.");
+								$("#mailup").focus();
+								return false;
+							}
+							return true;	
+				}
+			$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
+						$("#enviarForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+							if(validaUpForm()){     
+
+					// Primero validará el formulario.
+						e.preventDefault();
+								$.ajax({
+									type:"POST",
+									url: 'crudupdate.php',
+									data: $("#upform").serialize(),
+									success: function(response){
+											//var jsonData = JSON.stringify(response);
+											var jsonData = JSON.parse(response);
+											genera_datos(jsonData);
+
+											console.log(response);
+											
+						
+											
+									}
+									
+								});
+							}     
+
+					 });
+					});	
+				
+					
+			function genera_datos(data){
+
+					for(i=0;i<data.length;i++) {
+						  
+						 var name = document.getElementById('nom').value = data[i].nombre;
+						 //console.log(name);
+						 var ape = document.getElementById('ape').value = data[i].apellidos;
+						// console.log(ape);	
+						 var dir = document.getElementById('dir').value = data[i].direccion;
+						// console.log(dir);	
+						 var tel = document.getElementById('tel').value = data[i].telefono;
+						// console.log(tel);	
+						 var mail = document.getElementById('mail').value = data[i].correo;
+						 //console.log(mail);			
+						}	
+
+			}
+				
+				
+
+				
+
+					function validaUpUpForm(){
+
+							if($("#nom").val() == ""){
+								alert("El campo Nombre no puede estar vacío.");
+								$("#nom").focus();
+								return false;
+							}
+							if($("#ape").val() == ""){
+								alert("El campo Email no puede estar vacío.");
+								$("#ape").focus();
+								return false;
+							}
+							if($("#dir").val() == ""){
+								alert("El campo Email no puede estar vacío.");
+								$("#mail").focus();
+								return false;
+							}
+							if($("#tel").val() == ""){
+								alert("El campo Email no puede estar vacío.");
+								$("#tel").focus();
+								return false;
+							}	
+
+							if($("#mail").val() == ""){
+								alert("El campo Email no puede estar vacío.");
+								$("#mail").focus();
+								return false;
+							}
+							return true;	
+				}
+					$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
+								$("#enviarFormUP").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+									if(validaUpUpForm()){     
+
+							// Primero validará el formulario.
+								e.preventDefault();
+										$.ajax({
+											type:"POST",
+											url: 'crudup.php',
+											data: $("#upupform").serialize(),
+											success: function(response){
+													//var jsonNewData = JSON.stringify(response);
+													var jsonNewData = JSON.parse(response);
+													//genera_datos(jsonNewData);
+													console.log(response);
+												
+												
+													
+											}
+											
+										});
+									}     
+
+							 });
+							});	
+
+
+
+					
+				
+
+		</script>
+		
+
+	
+	
+	
+	
+			<p><a href="../index.html">Volver a inicio</p>
+	
+	</body>
+	
+
+
+
+</html>

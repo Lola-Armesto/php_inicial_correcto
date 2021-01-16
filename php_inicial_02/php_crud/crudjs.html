@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		
+	</head>
+	<body>
+	<div id = "form">
+		<p>Introduce datos</p>
+		<p>Nombre: <input type="text" name="name" id="name" placeholder="Introduce nombre" required="required"></p>
+		<p>Apellidos: <input type="text" name="surname" id="surname" placeholder="Introduce apellidos" required="required"></p>
+		<p>Direccion: <input type="text" name="dir" id="dir" placeholder="Introduce direccion" required="required"></p>
+		<p>Telefono: <input type="number" name="phone" id="phone" placeholder="Introduce telefono" required="required"></p>
+		<p>Email: <input type="text" name="mail" id="mail" placeholder="Introduce email" required="required"></p>	
+		<p><button onclick="enviar_formulario()">Enviar</button></p>
+
+	</div>	
+
+	
+
+		<p id="resultado"></p>
+		
+				
+		<script type="text/javascript" language="javascript">
+		
+	
+		
+	function enviar_formulario(){
+		 
+		 
+			
+			var nombre = document.getElementById("name").value;
+			var apellidos = document.getElementById("surname").value;
+			var direccion = document.getElementById("dir").value;
+			var telefono = document.getElementById("phone").value;
+			var email = document.getElementById("mail").value;
+			
+			
+			var ajax = new XMLHttpRequest();/*la variable ajax es un objeto tipo XMLHttpRequest*/
+			ajax.open("POST","crud.php", true);/*enviaremos por post los datos,al archivo php, por lo que en action del formulario ya no es necesario ponerlo y el true significa que es asincrono*/
+			ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			ajax.send("&nombre="+nombre+"&apellidos="+apellidos+"&direccion="+direccion+"&telefono="+telefono+"&email="+email);/*en esta parte enviaras tus datos, en donde los que van 
+			entre comillas sera el nombre que tendra el valor del dato al que le estas concatenando, si quieres añadir mas datos tendras que poner el amperson y el nombre de la variable
+			, en el php recibirias estos datos de la siguiente manera $_POST["correo"];*/
+		    ajax.onreadystatechange = function(){
+				console.log(ajax.status);
+				console.log(ajax.readyState);
+				
+				if(ajax.readyState == 4 && ajax.status == 200){
+				//console.log(ajax.responseText);
+				/*aqui si ajax.status es igual al codigo de estado, significa que la peticion se ha enviado correctamente y el readyState ==4 
+				significa que el servidor termino de devolver la respuesta*/ 
+				    var jsonResponse = ajax.responseText;
+                    var respuesta = JSON.parse(jsonResponse);
+
+					console.log(respuesta);
+					//genera_tabla(respuesta);
+					
+					
+					for(x of respuesta){
+					
+					console.log('Nombre: '+ x.nombre + ' - ' + 'Apellidos: ' + x.apellidos + ' - ' + 'Direccion: ' + x.direccion + ' - ' + 'Telefono: '  + x.telefono + '  - ' + 'Email: ' + x.email);
+					
+					}
+					
+				} 
+			}
+		
+
+		
+			
+		}
+	
+		</script>
+	</body>
+</html>

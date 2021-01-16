@@ -1,0 +1,62 @@
+body {
+	background-color:  #daefec ;
+}
+#menu{
+	
+	width:100%;
+	height:50px;
+	border: solid;
+	color:#6fd113;
+}
+#form{
+	border:solid;
+	width: 50%;
+	height:300px;
+	float: left;
+	
+}
+
+.parrafo{
+	color:red; 
+	width: 1200px;
+	
+	
+}
+table{
+	margin-top:1%;
+	border:solid;
+	border-color:blue;
+	float:left;
+	width:500px;
+}
+thead{
+	color:blue;
+}
+h2{
+	margin-left:5%;
+	color:blue;
+	float:left;
+	width:30%;
+}
+#navegacion{
+	
+	width: 90%;
+	height: 30px;
+	
+}
+.seleccion{
+
+	color:blue;
+	float:left;
+	width:100%;
+}
+#create{
+	width: 900px;
+	float: left;
+	
+}
+#read{
+	width: 300px;
+	float:left;
+	
+}
