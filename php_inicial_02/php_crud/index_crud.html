@@ -3,10 +3,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+		<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		
 	</head>
 	<body>
+		<p><a href="../../index.html">Volver a inicio</a></p>
+	<div id = "create">
+	<label>ALTAS AGENDA</label>
 	<form method="post" id="dataform">
 		<p>Introduce datos</p>
 		<p>Nombre: <input type="text" name="name" id="name" placeholder="Introduce nombre" required="required"></p>
@@ -14,79 +18,93 @@
 		<p>Direccion: <input type="text" name="dir" id="dir" placeholder="Introduce direccion" required="required"></p>
 		<p>Telefono: <input type="number" name="phone" id="phone" placeholder="Introduce telefono" required="required"></p>
 		<p>Email: <input type="email" name="mail" id="mail" placeholder="Introduce email" required="required"></p>	
-		<p><button id="enviarForm">Enviar</button></p>
-		<button onclick="clean()">Limpiar</button></p>
-
+		<p><button id="enviarForm">Enviar</button></p><p><button onclick="clean()">Limpiar</button></p>
 		
-
 	</form>
+	</div>
+	<div id = "update">
+	<label>ACTUALIZACION AGENDA</label>
+	<div>
 	<form method="post" id="upform">
 		<p> Indroduce email: <input type="email" name="mailup" id="mailup" placeholder="Indroduce mail" required="required"></p>
-		<p><button id="enviarupForm">Actualizar datos</button></p>
+		<p><button id="enviarupForm">Enviar Consulta</button></p>
 	</form> 
-
-		<p id="resultado"></p>
+	</div>
+	<div>
+	<form method="post" id = "up">
+		<p>Nombre: <input type="text" name="dato1" id="dato1" ></p>
+		<p>Apellidos: <input type="text" name="dato2" id="dato2" ></p>
+		<p>Direccion: <input type="text" name="dato3" id="dato3" ></p>
+		<p>Telefono: <input type="number" name="dato4" id="dato4" ></p>
+		<p>Email: <input type="email" name="dato5" id="dato5" ></p>	
+		<p><button id="sendForm">Actualizar</button>
+		<button id="delForm">Eliminar</button>
+		<button onclick="clean()">Limpiar</button></p>
+	</form>
+	</div>
+	
+	<p id="resultado"></p>
 	
 		<script type="text/javascript" language="javascript">
 		
-		function validaForm(){
-			// Campos de texto
-			if($("#name").val() == ""){
-				alert("El campo Nombre no puede estar vacío.");
-				$("#name").focus();       // Esta función coloca el foco de escritura del usuario en el campo Nombre directamente.
-				return false;
-			}
-			if($("#surname").val() == ""){
-				alert("El campo Apellidos no puede estar vacío.");
-				$("#surname").focus();
-				return false;
-			}
-			if($("#dir").val() == ""){
-				alert("El campo Direccion no puede estar vacío.");
-				$("#dir").focus();
-				return false;
-			}
-			if($("#phone").val() == ""){
-				alert("El campo Telefono no puede estar vacío.");
-				$("#phone").focus();
-				return false;
-			}
-			if($("#mail").val() == ""){
-				alert("El campo Email no puede estar vacío.");
-				$("#mail").focus();
-				return false;
-			}	
-		   
+function validaForm(){
+	// Campos de texto
+	if($("#name").val() == ""){
+		alert("El campo Nombre no puede estar vacío.");
+		$("#name").focus();       // Esta función coloca el foco de escritura del usuario en el campo Nombre directamente.
+		return false;
+	}
+	if($("#surname").val() == ""){
+		alert("El campo Apellidos no puede estar vacío.");
+		$("#surname").focus();
+		return false;
+	}
+	if($("#dir").val() == ""){
+		alert("El campo Direccion no puede estar vacío.");
+		$("#dir").focus();
+		return false;
+	}
+	if($("#phone").val() == ""){
+		alert("El campo Telefono no puede estar vacío.");
+		$("#phone").focus();
+		return false;
+	}
+	if($("#mail").val() == ""){
+		alert("El campo Email no puede estar vacío.");
+		$("#mail").focus();
+		return false;
+	}	
+	
 
-			return true; // Si todo está correcto
-		}
+	return true; // Si todo está correcto
+}
 
-		$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
-			$("#enviarForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
-				if(validaForm()){     
+$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
+	$("#enviarForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+		if(validaForm()){     
 
-		// Primero validará el formulario.
-			e.preventDefault();
-					$.ajax({
-						type:"POST",
-						url: 'crud.php',
-						data: $("#dataform").serialize(),
-						success: function(response){
-								//var jsonData = JSON.stringify(response);
-								var jsonData = JSON.parse(response);
-								genera_tabla(jsonData);
-								
-								console.log(response);
-							
-								
-								
-						}
+// Primero validará el formulario.
+	e.preventDefault();
+			$.ajax({
+				type:"POST",
+				url: 'crud.php',
+				data: $("#dataform").serialize(),
+				success: function(response){
+						//var jsonData = JSON.stringify(response);
+						var jsonData = JSON.parse(response);
+						genera_tabla(jsonData);
 						
-					});
-				}     
+						console.log(response);
+					
+						
+						
+				}
+				
+			});
+		}     
 
-		 });
-		});	
+	});
+});	
 function genera_tabla(data) {
 
 		// Obtener la referencia del elemento body
@@ -186,7 +204,7 @@ function validaUpForm(){
 			return true;	
 }
 $(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
-			$("#enviarupForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+			$("#enviarupForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.Cogemos id del button
 				if(validaUpForm()){     
 
 		// Primero validará el formulario.
@@ -194,16 +212,12 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 					$.ajax({
 						type:"POST",
 						url: 'crudupdate.php',
-						data: $("#upform").serialize(),
+						data: $("#upform").serialize(), //cogemos id del form
 						success: function(response){
-								var jsonData = JSON.parse(stringify(response));
-								//var jsonData = JSON.parse(response);
-								//genera_tabla(jsonData);
-								
-								console.log(response);
-							
-								
-								
+								//var jsonData = JSON.stringify(response);
+								var jsonData = JSON.parse(response);
+								genera_form(jsonData);
+								console.log(response);							
 						}
 						
 					});
@@ -211,6 +225,128 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 
 		 });
 		});	
+		function genera_form(data){
+			
+			for (x of data){
+				document.getElementById("dato1").value = x.nombre;
+				document.getElementById("dato2").value = x.apellidos;
+				document.getElementById("dato3").value = x.direccion;
+				document.getElementById("dato4").value = x.telefono;
+				document.getElementById("dato5").value = x.correo;
+			}
+		}
+		function update(){
+				// Campos de texto
+	if($("#dato1").val() == ""){
+		alert("El campo Nombre no puede estar vacío.");
+		$("#dato1").focus();       // Esta función coloca el foco de escritura del usuario en el campo Nombre directamente.
+		return false;
+	}
+	if($("#dato2").val() == ""){
+		alert("El campo Apellidos no puede estar vacío.");
+		$("#dato2").focus();
+		return false;
+	}
+	if($("#dato3").val() == ""){
+		alert("El campo Direccion no puede estar vacío.");
+		$("#dato3").focus();
+		return false;
+	}
+	if($("#dato4").val() == ""){
+		alert("El campo Telefono no puede estar vacío.");
+		$("#dato4").focus();
+		return false;
+	}
+	if($("#dato5").val() == ""){
+		alert("El campo Email no puede estar vacío.");
+		$("#dato5").focus();
+		return false;
+	}	
+	
+
+	return true; // Si todo está correcto
+}
+
+			$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
+			$("#sendForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar. id de button
+				if(update()){   
+
+					e.preventDefault();
+					$.ajax({
+						type:"POST",
+						url: 'crudup.php',
+						data: $("#up").serialize(), //id del form
+						success: function(response){
+								//var jsonData = JSON.stringify(response);
+								var jsonData = JSON.parse(response);
+								genera_form(jsonData);
+								console.log(response);							
+						}
+						
+					});
+				    
+				}
+		 });
+		});	
+		function del(){
+				// Campos de texto
+	if($("#dato1").val() == ""){
+		alert("El campo Nombre no puede estar vacío.");
+		$("#dato1").focus();       // Esta función coloca el foco de escritura del usuario en el campo Nombre directamente.
+		return false;
+	}
+	if($("#dato2").val() == ""){
+		alert("El campo Apellidos no puede estar vacío.");
+		$("#dato2").focus();
+		return false;
+	}
+	if($("#dato3").val() == ""){
+		alert("El campo Direccion no puede estar vacío.");
+		$("#dato3").focus();
+		return false;
+	}
+	if($("#dato4").val() == ""){
+		alert("El campo Telefono no puede estar vacío.");
+		$("#dato4").focus();
+		return false;
+	}
+	if($("#dato5").val() == ""){
+		alert("El campo Email no puede estar vacío.");
+		$("#dato5").focus();
+		return false;
+	}	
+	
+
+	return true; // Si todo está correcto
+}
+
+			$(document).ready( function() {   // Esta parte del código se ejecutará automáticamente cuando la página esté lista.
+			$("#delForm").click( function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar. id de button
+				if(del()){   
+
+					e.preventDefault();
+					$.ajax({
+						type:"POST",
+						url: 'cruddel.php',
+						data: $("#up").serialize(), //id del form
+						success: function(response){
+								//var jsonData = JSON.stringify(response);
+								var jsonData = JSON.parse(response);
+								genera_form(jsonData);
+								alert ('Registro eliminado de agenda')
+								
+								console.log(response);							
+						}
+						
+					});
+				    
+				}
+		 });
+		});	
+
+
+		
+
 		</script>
 		
 
@@ -218,7 +354,7 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 	
 	
 	
-			<p><a href="../index.html">Volver a inicio</p>
+			
 	
 	</body>
 	

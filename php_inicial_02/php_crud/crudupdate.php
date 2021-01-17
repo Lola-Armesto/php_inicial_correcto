@@ -1,5 +1,5 @@
 <?php
-include_once("../dB_conexion/conexion.php");
+include_once("../../dB_conexion/conexion.php");
 	$tab = "CREATE TABLE IF NOT EXISTS agenda(
 		id_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 		nombre_id varchar(10),
@@ -20,28 +20,29 @@ include_once("../dB_conexion/conexion.php");
 	$oldJSON = array();
 	
 
-	$sql = "SELECT * FROM agenda where email_id ='".$mail."'";
+	$sql = "SELECT * FROM agenda where email_id = '".$mail."'";
 	$ej = mysqli_query($db_conn,$sql);
 	$res = mysqli_fetch_array($ej);
 		 $cod = $res['id_id'];
+		 session_start();
+		 $_SESSION['codigo'] = $cod;
 		 $name = $res['nombre_id'];
 		 $surname = $res['apellidos_id'];
 		 $direction = $res['direccion_id'];
 		 $phone = $res['telefono_id'];
 		 $mail = $res['email_id'];
-	 
-	 
-	 
 
 	 $oldJSON[] = array("nombre"=>$name,"apellidos"=>$surname,"direccion"=>$direction,"telefono"=>$phone,"correo"=>$mail);
 	 $vJSON = json_encode($oldJSON);
-	 echo $vJSON;
+	 die ($vJSON);
+	
+		if(isset($_POST["up"])){
 
-	/*$nname = $_POST['nom'];
-	$nsurname = $_POST['ape'];
-	$ndirection = $_POST['dir'];
-	$nphone = $_POST['tel'];
-	$nmail = $_POST['mail'];
+	$nname = $_POST['dato1'];
+	$nsurname = $_POST['dato2'];
+	$ndirection = $_POST['dato3'];
+	$nphone = $_POST['dato4'];
+	$nmail = $_POST['dato5'];
 	$newJSON = array();
 
 	$up = "UPDATE agenda SET nombre_id = '".$nname."', apellidos_id = '".$nsurname."', direccion_id = '".$ndirection."', telefono_id = '".$nphone."', email_id = '".$nmail."' WHERE id_id = '".$cod."'";
@@ -59,7 +60,8 @@ include_once("../dB_conexion/conexion.php");
 
 	$newJSON[] = array("nombre"=>$nname,"apellidos"=>$nsurname,"direccion"=>$ndirection,"telefono"=>$nphone,"correo"=>$nmail);
 	$nJSON = json_encode($newJSON);
-	 echo $nJSON;*/
+	echo $nJSON;}
+	
 
 
 
