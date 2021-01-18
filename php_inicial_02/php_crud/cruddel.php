@@ -10,8 +10,7 @@ include_once("../../dB_conexion/conexion.php");
 	$nmail = $_POST['dato5'];
 	$newJSON = array();
 
-	//$up = "UPDATE agenda SET nombre_id = '$nname', apellidos_id = '$nsurname', direccion_id = '$ndirection', telefono_id = '$nphone', email_id = '$nmail' WHERE id_id = '$cod'";
-    //$upej = mysqli_query($db_conn,$up);
+	
     $del = "DELETE FROM agenda WHERE id_id = '$cod'";
     $delej = mysqli_query($db_conn,$del);
 
