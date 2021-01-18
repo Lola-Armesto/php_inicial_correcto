@@ -1,28 +1,15 @@
 <?php
 include_once("../../dB_conexion/conexion.php");
-	$tab = "CREATE TABLE IF NOT EXISTS agenda(
-		id_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-		nombre_id varchar(10),
-		apellidos_id  varchar(80),
-		direccion_id varchar(50),
-		telefono_id  int(9),
-		email_id varchar(30))" ;
-
-		if (mysqli_query($db_conn, $tab)) {
-		// Mostramos mensaje si la tabla ha sido creado correctamente!
-			//echo "Tabla Agenda created successfully";
-		} else {
-			// Mostramos mensaje si hubo algún error en el proceso de creación
-			//echo "Error al crear la tabla: " . mysqli_error($db_conn);
-		}
+include_once("../utilities/helper.php");
 	
 	$mail = $_POST['mailup'];
 	$oldJSON = array();
-	
+	$error = '';
 
 	$sql = "SELECT * FROM agenda where email_id = '".$mail."'";
 	$ej = mysqli_query($db_conn,$sql);
 	$res = mysqli_fetch_array($ej);
+if($res){
 		 $cod = $res['id_id'];
 		 session_start();
 		 $_SESSION['codigo'] = $cod;
@@ -35,7 +22,7 @@ include_once("../../dB_conexion/conexion.php");
 	 $oldJSON[] = array("nombre"=>$name,"apellidos"=>$surname,"direccion"=>$direction,"telefono"=>$phone,"correo"=>$mail);
 	 $vJSON = json_encode($oldJSON);
 	 die ($vJSON);
-	
+		
 		if(isset($_POST["up"])){
 
 	$nname = $_POST['dato1'];
@@ -60,9 +47,15 @@ include_once("../../dB_conexion/conexion.php");
 
 	$newJSON[] = array("nombre"=>$nname,"apellidos"=>$nsurname,"direccion"=>$ndirection,"telefono"=>$nphone,"correo"=>$nmail);
 	$nJSON = json_encode($newJSON);
-	echo $nJSON;}
+	die ($nJSON);
+	mysqli_free_result($ej,$upej,$ejup);
+	unset($_POST,$db_conn,$res,$resup);
+	mysqli_close($db_conn);
+	session_destroy();
+}
 	
-
+}else{$error = '<p>No existe este registro en la base de datos</p>';
+	  send_err(-1,$error);exit;	}
 
 
 			

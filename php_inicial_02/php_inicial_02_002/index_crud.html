@@ -25,10 +25,12 @@
 	<div id = "update">
 	<label>ACTUALIZACION AGENDA</label>
 	<div>
+		<p id="resultado" style="color:crimson;font-size: large;"></p>
 	<form method="post" id="upform">
 		<p> Indroduce email: <input type="email" name="mailup" id="mailup" placeholder="Indroduce mail" required="required"></p>
 		<p><button id="enviarupForm">Enviar Consulta</button></p>
 	</form> 
+	
 	</div>
 	<div>
 	<form method="post" id = "up">
@@ -42,8 +44,9 @@
 		<button onclick="clean()">Limpiar</button></p>
 	</form>
 	</div>
+	</div>
 	
-	<p id="resultado"></p>
+	
 	
 		<script type="text/javascript" language="javascript">
 		
@@ -225,8 +228,11 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 
 		 });
 		});	
-		function genera_form(data){
-			
+function genera_form(data){
+	if(data[0].code<0){
+		var errores = resultado.innerHTML = data[0].message;
+		document.getElementById('mailup').value = '';
+	}else{	
 			for (x of data){
 				document.getElementById("dato1").value = x.nombre;
 				document.getElementById("dato2").value = x.apellidos;
@@ -235,7 +241,8 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 				document.getElementById("dato5").value = x.correo;
 			}
 		}
-		function update(){
+	}	
+function update(){
 				// Campos de texto
 	if($("#dato1").val() == ""){
 		alert("El campo Nombre no puede estar vacío.");
@@ -279,6 +286,7 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 						success: function(response){
 								//var jsonData = JSON.stringify(response);
 								var jsonData = JSON.parse(response);
+								alert ('Registro actualizado en agenda')
 								genera_form(jsonData);
 								console.log(response);							
 						}
@@ -288,7 +296,7 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 				}
 		 });
 		});	
-		function del(){
+function del(){
 				// Campos de texto
 	if($("#dato1").val() == ""){
 		alert("El campo Nombre no puede estar vacío.");

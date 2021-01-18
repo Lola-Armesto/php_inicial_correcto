@@ -51,12 +51,16 @@ h2{
 	width:100%;
 }
 #create{
-	width: 900px;
+	width: 40%;
 	float: left;
 	
 }
 #read{
-	width: 300px;
+	width: 30%;
 	float:left;
 	
+}
+#update{
+	width: 40%;
+	float: left;
 }

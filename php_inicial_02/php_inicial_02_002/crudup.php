@@ -2,7 +2,7 @@
 
 include_once("../../dB_conexion/conexion.php");
 	 session_start();
-	 $cod = $_SESSION['codigo'];
+	$cod = $_SESSION['codigo'];
 	$nname = $_POST['dato1'];
 	$nsurname = $_POST['dato2'];
 	$ndirection = $_POST['dato3'];
@@ -25,5 +25,9 @@ include_once("../../dB_conexion/conexion.php");
 
 	$newJSON[] = array("nombre"=>$nname,"apellidos"=>$nsurname,"direccion"=>$ndirection,"telefono"=>$nphone,"correo"=>$nmail);
 	$nJSON = json_encode($newJSON);
-	 echo $nJSON;
+	die($nJSON);
+	mysqli_free_result($upej,$ejup);
+	unset($_POST,$db_conn,$resup);
+	mysqli_close($db_conn);
+	session_destroy();
 ?>

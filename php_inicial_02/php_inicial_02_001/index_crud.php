@@ -11,7 +11,7 @@
 	
 		<nav id = "menu" >
 			 	<button><a href="../../index.html">Volver a inicio</a>
-				<button><a href="#create"  id="btn1" ">Alta Usuarios</a></button>
+				<button><a href="#create"  id="btn1">Alta Usuarios</a></button>
 				<button><a href="#read" id="btn2">Operaciones en Registros</a></button>
 		
 		</nav>
@@ -19,7 +19,7 @@
 		<div id = "create" >
 			<p><u><h3 style = "color:green;">Alta Usuarios</h3></u></p>
 			
-			<form method ="post" id="formulario" action="config/icrud.php">
+			<form method ="post" id="formulario" action="config/create.php">
 					<p>Nombre : 	<input type = "text" name = "nom" id = "nom" required="required"></p>
 					<p>Apellidos :  <input type = "text" name = "ape" id = "ape" required="required"></p>
 					<p>Direccion :  <input type = "text" name = "dir" id = "dir" required="required"></p>
@@ -58,7 +58,7 @@
 
 				<?php
 					include_once("../../dB_conexion/conexion.php");
-					include_once("tabla.php");
+					include_once("../utilities/tabla.php");
 
 					$sqlcom = "SELECT * FROM agenda ";
 					$sqlej = mysqli_query($db_conn,$sqlcom);
@@ -84,8 +84,8 @@
 											<td style = 'border:1px solid black'>".$dir." </td>
 											<td style = 'border:1px solid black'>".$phone." </td>
 											<td style = 'border:1px solid black'>".$mail."</td>
-											<td><a href ='config/ucrud.php?var=$cod'>Modificar</a></td>
-											<td><a href ='config/dcrud.php?var=$cod'>Eliminar</a></td>
+											<td><a href ='config/update.php?var=$cod'>Modificar</a></td>
+											<td><a href ='config/delete.php?var=$cod'>Eliminar</a></td>
 										</tr>"; 
 							
 						}
@@ -107,6 +107,14 @@
 		
 		<script type="text/javascript">
 		
+				function ver(read){
+					var btn1 = document.getElementById['read'];
+					var xnodoEnlace = document.getElementById['xread'].click;
+						if (btn1.style.display = 'none'){
+							btn1.style.display = 'block';
+						}else{btn1.style.display = 'none' }
+					
+				}
 				
 		
 			
