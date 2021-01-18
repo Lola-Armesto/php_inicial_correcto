@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+		<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		
+	</head>
+	<body>
+		<p><a href="../../index.html">Volver a inicio</a></p>
+	<div id = "create">
+	<label>ALTAS AGENDA</label>
+		<p>Introduce datos</p>
+		<p>Nombre: <input type="text" name="name" id="name" placeholder="Introduce nombre" required="required"></p>
+		<p>Apellidos: <input type="text" name="surname" id="surname" placeholder="Introduce apellidos" required="required"></p>
+		<p>Direccion: <input type="text" name="dir" id="dir" placeholder="Introduce direccion" required="required"></p>
+		<p>Telefono: <input type="number" name="phone" id="phone" placeholder="Introduce telefono" required="required"></p>
+		<p>Email: <input type="email" name="mail" id="mail" placeholder="Introduce email" required="required"></p>	
+		<p><button onclick="enviar_formulario()">Enviar</button></p><p><button onclick="clean()">Limpiar</button></p>
+	</div>
+	<div id = "update">
+	<label>ACTUALIZACION AGENDA</label>
+	<div>
+		<p id="resultado" style="color:crimson;font-size: large;"></p>
+	<form method="post" id="upform">
+		<p> Indroduce email: <input type="email" name="mailup" id="mailup" placeholder="Indroduce mail" required="required"></p>
+		<p><button id="enviarupForm">Enviar Consulta</button></p>
+	</form> 
+	
+	</div>
+	<div>
+	<form method="post" id = "up">
+		<p>Nombre: <input type="text" name="dato1" id="dato1" ></p>
+		<p>Apellidos: <input type="text" name="dato2" id="dato2" ></p>
+		<p>Direccion: <input type="text" name="dato3" id="dato3" ></p>
+		<p>Telefono: <input type="number" name="dato4" id="dato4" ></p>
+		<p>Email: <input type="email" name="dato5" id="dato5" ></p>	
+		<p><button id="sendForm">Actualizar</button>
+		<button id="delForm">Eliminar</button>
+		<button onclick="clean()">Limpiar</button></p>
+	</form>
+	</div>
+    </div>
+<script type="text/javascript" language="javascript">
+
+
+        function enviar_formulario(){
+    
+            var name = document.getElementById("name").value;
+            var surname = document.getElementById("surname").value;
+            var dir = document.getElementById("dir").value;
+            var phone = document.getElementById("phone").value;
+            var mail = document.getElementById("mail").value;
+                
+                
+            var ajax = new XMLHttpRequest();/*la variable ajax es un objeto tipo XMLHttpRequest*/
+            ajax.open("POST", "datos.php", true);/*enviaremos por post los datos,al archivo php, por lo que en action del formulario ya no es necesario ponerlo y el true significa que es asincrono*/
+            ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            ajax.send("&name="+name+"&surname="+surname+"&dir="+dir+"&phone="+phone+"&mail="+mail);/*en esta parte enviaras tus datos, en donde los que van 
+            entre comillas sera el nombre que tendra el valor del dato al que le estas concatenando, si quieres añadir mas datos tendras que poner el amperson y el nombre de la variable
+            , en el php recibirias estos datos de la siguiente manera $_POST["correo"];*/
+            ajax.onreadystatechange = function(){
+               // console.log(ajax.status);
+               // console.log(ajax.readyState);
+                
+                if(ajax.readyState == 4 && ajax.status == 200){
+                console.log(ajax.responseText);
+                /*aqui si ajax.status es igual al codigo de estado, significa que la peticion se ha enviado correctamente y el readyState ==4 
+                significa que el servidor termino de devolver la respuesta*/ 
+                 var jsonResponse = ajax.responseText;
+                  var respuesta = JSON.stringify(jsonResponse);
+                 //var respuesta=JSON.parse(jsonResponse);
+                    console.log(respuesta);
+                    genera_tabla(respuesta);
+                    
+                } 
+            }	
+            
+        }
+    
+            // Obtener la referencia del elemento body
+      var body = document.getElementsByTagName("body")[0];
+      // Crea un elemento <table> y un elemento <tbody>
+      var tabla   = document.createElement("table");
+      var tblheader = document.createElement("thead");
+      var tblBody = document.createElement("tbody");
+      var cabecera = document.createElement("tr");
+      
+            var celda = document.createElement("th");
+            var textoCelda = document.createTextNode("NOMBRE");
+            celda.appendChild(textoCelda);
+            cabecera.appendChild(celda);
+    
+            var celda = document.createElement("th");
+            var textoCelda = document.createTextNode("APELLIDOS");
+            celda.appendChild(textoCelda);
+            cabecera.appendChild(celda);
+            
+            var celda = document.createElement("th");
+            var textoCelda = document.createTextNode("DIRECCION");
+            celda.appendChild(textoCelda);
+            cabecera.appendChild(celda);
+            
+            var celda = document.createElement("th");
+            var textoCelda = document.createTextNode("TELEFONO");
+            celda.appendChild(textoCelda);
+            cabecera.appendChild(celda);
+            
+            var celda = document.createElement("th");
+            var textoCelda = document.createTextNode("EMAIL");
+            celda.appendChild(textoCelda);
+            cabecera.appendChild(celda);
+            
+            tblheader.appendChild(cabecera);
+        
+            
+      // Crea las celdas
+    
+    
+    function genera_tabla(data) {
+    
+    if(data[0].code < 0){
+    //console.log(data.length);
+    var errores = resultado.innerHTML = data[0].message;
+    }else{
+    
+      for (var i = 0; i < data.length; i++) {
+        // Crea las hileras de la tabla
+       var hilera = document.createElement("tr");
+    
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode(data[i].name);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+            
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode(data[i].surname);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+            
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode(data[i].dir);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+            
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode(data[i].phone);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+            
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode(data[i].mail);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode('');
+            celda.innerHTML = "<a href ='update.php'>Actualizar</a>";
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+        
+    
+        // agrega la hilera al final de la tabla (al final del elemento tblbody)
+        tblBody.appendChild(hilera);
+            
+        }
+            
+      
+    
+    
+       // posiciona el <thead> debajo del elemento <table>
+      tabla.appendChild(tblheader);
+      // posiciona el <tbody> debajo del elemento <thead>
+      tabla.appendChild(tblBody);
+      // appends <table> into <body>
+      body.appendChild(tabla);
+      // modifica el atributo "border" de la tabla y lo fija a "2";
+    
+      tabla.setAttribute("border", "2");
+     
+     
+        }
+        
+    }
+    
+    function clean(){
+        document.getElementById("matricula").value = '';
+        document.getElementById("marca").value = '';
+        document.getElementById("modelo").value = '';
+        document.getElementById("color").value = '';
+        document.getElementById("precio").value ='';
+        
+        location.reload();
+        }
+    
+    
+</script>
+    
+	
+	
+		
+</body>
+	
+
+
+
+</html>
