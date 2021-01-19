@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
-		<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="../css/estilo.css" type="text/css" media="screen">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		
 	</head>
@@ -90,7 +90,7 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 	e.preventDefault();
 			$.ajax({
 				type:"POST",
-				url: 'crud.php',
+				url: 'config/crud.php',
 				data: $("#dataform").serialize(),
 				success: function(response){
 						//var jsonData = JSON.stringify(response);
@@ -214,13 +214,13 @@ $(document).ready( function() {   // Esta parte del código se ejecutará autom�
 			e.preventDefault();
 					$.ajax({
 						type:"POST",
-						url: 'crudupdate.php',
+						url: 'config/crudupdate.php',
 						data: $("#upform").serialize(), //cogemos id del form
 						success: function(response){
 								//var jsonData = JSON.stringify(response);
 								var jsonData = JSON.parse(response);
 								genera_form(jsonData);
-								console.log(response);							
+							   //	console.log(response);							
 						}
 						
 					});
@@ -281,7 +281,7 @@ function update(){
 					e.preventDefault();
 					$.ajax({
 						type:"POST",
-						url: 'crudup.php',
+						url: 'config/crudup.php',
 						data: $("#up").serialize(), //id del form
 						success: function(response){
 								//var jsonData = JSON.stringify(response);
@@ -335,7 +335,7 @@ function del(){
 					e.preventDefault();
 					$.ajax({
 						type:"POST",
-						url: 'cruddel.php',
+						url: 'config/cruddel.php',
 						data: $("#up").serialize(), //id del form
 						success: function(response){
 								//var jsonData = JSON.stringify(response);
@@ -343,7 +343,7 @@ function del(){
 								genera_form(jsonData);
 								alert ('Registro eliminado de agenda')
 								
-								console.log(response);							
+								//console.log(response);							
 						}
 						
 					});

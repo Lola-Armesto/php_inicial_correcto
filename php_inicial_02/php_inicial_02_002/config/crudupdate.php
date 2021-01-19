@@ -1,6 +1,6 @@
 <?php
 include_once("../../dB_conexion/conexion.php");
-include_once("../utilities/helper.php");
+include_once("../../utilities/helper.php");
 	
 	$mail = $_POST['mailup'];
 	$oldJSON = array();

@@ -19,9 +19,8 @@ $newJSON[] = array("nombre"=>$nname,"apellidos"=>$nsurname,"direccion"=>$ndirect
 $nJSON = json_encode($newJSON);
 echo $nJSON;
 
-mysqli_free_result($delej);
-unset($db_conn,$res);
-mysqli_close($db_conn);
+
+
 session_destroy();
 
 	

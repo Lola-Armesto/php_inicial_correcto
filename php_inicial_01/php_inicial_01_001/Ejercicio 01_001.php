@@ -2,13 +2,13 @@
 
 <html>
 <head>
-<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../css/estilo.css" type="text/css" media="screen">
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 </head>
 <body>
 <p><a href="../../index.html">Volver a inicio</p>
 <?php
-include_once("../../dB_conexion/conexion.php");
+include_once("../dB_conexion/conexion.php");
 // Insertar Datos (Harcodeados)
 $sql="INSERT INTO php_inicial_lola (matricula_coche, marca_coche, modelo_coche, color_coche, precio_coche) VALUES ('1212JJJ','SEAT','TOLEDO','ROJO','10000')";
 if(mysqli_query($db_conn,$sql)){ echo('DATOS GRABADOS'); }else{ die('No se han grabado los datos. Intentalo de nuevo');}

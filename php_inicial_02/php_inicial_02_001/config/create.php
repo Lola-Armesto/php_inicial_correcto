@@ -2,14 +2,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-		<link rel="stylesheet" href="../../../css/estilo.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
 		<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		
 	</head>
 	<body>
 					<?php
-						include_once("../../../dB_conexion/conexion.php");
+						include_once("../../dB_conexion/conexion.php");
 				
 							if(isset($_POST)){
 

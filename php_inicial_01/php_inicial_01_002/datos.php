@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="../../css/estilo.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../css/estilo.css" type="text/css" media="screen">
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 </head>
 <body>
 <p><label><a href="../../index.html">Volver a inicio</a></label></p>
 <?php
 
-include_once("../../dB_conexion/conexion.php");
+include_once("../dB_conexion/conexion.php");
 // Recogiendo datos del formulario
 if(isset($_POST)){
 $matricula = $_POST['matricula'];

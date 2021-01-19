@@ -2,7 +2,7 @@
 <?php
 
 // Realizando conexion con BBDD
-include_once("../../dB_conexion/conexion.php");
+include_once("../dB_conexion/conexion.php");
 include_once("helper.php");
 
 //VALIDACION DATOS LADO SERVIDOR
