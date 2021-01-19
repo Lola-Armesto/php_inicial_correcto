@@ -48,6 +48,7 @@ while($resultado = mysqli_fetch_array($consulta)){
 	$cadenaJSON[]=array("cod"=>$cod,"name"=>$name,"surname"=>$surname,"direction"=>$dir,"phone"=>$phone,"mail"=>$mail);
 } 
 //Creando JSON
+
 $jsonObj = json_encode($cadenaJSON);
 //echo $jsonObj;
 die(json_encode($cadenaJSON));

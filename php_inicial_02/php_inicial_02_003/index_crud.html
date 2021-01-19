@@ -19,7 +19,8 @@
 		<p>Email: <input type="email" name="mail" id="mail" placeholder="Introduce email" ></p>	
         <p><button onclick="enviar_formulario()">Enviar</button></p>
         <p><button onclick="clean()">Limpiar</button></p>
-	</div>
+    </div>
+    <div id="contenedor"></div>
     <div id="resultado"></div>
     
 <script type="text/javascript" language="javascript">
@@ -136,13 +137,13 @@
 
             var celda = document.createElement("td");
             var textoCelda = document.createTextNode('');
-            celda.innerHTML = "<a href ='#update'>Actualizar</a>";
+            celda.innerHTML = "<span onclick='transformarEnEditable(this)'>Editar</span>";
             celda.appendChild(textoCelda);
             hilera.appendChild(celda);
 
             var celda = document.createElement("td");
             var textoCelda = document.createTextNode('');
-            celda.innerHTML = "<a href ='#del'>Eliminar</a>";
+            celda.innerHTML = "<button id='btn2' onclick='del()'>Eliminar</button>";
             celda.appendChild(textoCelda);
             hilera.appendChild(celda);
         
@@ -179,7 +180,60 @@
         
         location.reload();
         }
+        var editando = false;
+    function transformarEnEditable(nodo){
+     if(editando == false){
+         var nodoTd = nodo.parentNode;
+         var nodoTr = nodoTd.parentNode;
+         var nodoContenedor = document.getElementById('contenedor');
+         var nodosenTr = nodoTr.getElementsByTagName('td');
+         var nom = nodosenTr[0].textContent;
+         var ape = nodosenTr[1].textContent;
+         var dire = nodosenTr[2].textContent;
+         var tel = nodosenTr[3].textContent;
+         var cor = nodosenTr[4].textContent;
+         var nuevoCodigoHtml = '<td><input type="text" name="nombre" id="nombre" value="'+nom+'" ></td>'+
+                                '<td><input type="text" name="apellidos" id="apellidos" value="'+ape+'" ></td>'+
+                                '<td><input type="text" name="direccion" id="direccion" value="'+dire+'" ></td>'+
+                                '<td><input type="text" name="telefono" id="telefono" value="'+tel+'" ></td>'+
+                                '<td><input type="text" name="correo" id="correo" value="'+cor+'" ></td> <td>En edición</td>';
+        
+        nodoTr.innerHTML = nuevoCodigoHtml;
+        nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'+
+                                    '<form name = "formulario" action="update.php" method="post" onsubmit="capturarEnvio()" onreset="anular()">'+
+                                    '<input class="boton" type = "submit" value="Aceptar"> <input class="boton" type="reset" value="Cancelar">';
+
+                                     editando = "true";
+    }
+
+}
+function capturarEnvio(){
+
+    var nodoContenedor = document.getElementById('contenedor'); //Nodo DIV
+    nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'+
+    '<form name = "formulario" action="update.php" method="post" onsubmit="capturarEnvio()" onreset="anular()">'+
+    '<input type="hidden" name="nombre" value="'+document.querySelector('#nombre').value+'">'+
+    '<input type="hidden" name="apellidos" value="'+document.querySelector('#apellidos').value+'">'+
+    '<input type="hidden" name="direccion" value="'+document.querySelector('#direccion').value+'">'+
+    '<input type="hidden" name="telefono" value="'+document.querySelector('#telefono').value+'">'+
+    '<input type="hidden" name="correo" value="'+document.querySelector('#correo').value+'">'+
+    '<input type = "submit" value="Aceptar"> <input type="reset" value="Cancelar">';
+
+    document.formulario.submit();
+
+    }
+
     
+
+    function anular(){
+
+    window.location.reload();
+    }
+
+
+      
+
+
     
 </script>
     
