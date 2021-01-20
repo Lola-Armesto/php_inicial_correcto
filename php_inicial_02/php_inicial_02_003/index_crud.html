@@ -20,9 +20,9 @@
         <p><button onclick="enviar_formulario()">Enviar</button></p>
         <p><button onclick="clean()">Limpiar</button></p>
     </div>
-    <div id="contenedor"></div>
-    <div id="resultado"></div>
     
+    <div id="resultado"></div>
+    <div id="contenedor"></div>
 <script type="text/javascript" language="javascript">
 
 
@@ -137,13 +137,13 @@
 
             var celda = document.createElement("td");
             var textoCelda = document.createTextNode('');
-            celda.innerHTML = "<span onclick='transformarEnEditable(this)'>Editar</span>";
+            celda.innerHTML = "<span style = 'color:blue' onclick='editing(this)'>Editar</span>";
             celda.appendChild(textoCelda);
             hilera.appendChild(celda);
 
             var celda = document.createElement("td");
             var textoCelda = document.createTextNode('');
-            celda.innerHTML = "<button id='btn2' onclick='del()'>Eliminar</button>";
+            celda.innerHTML = "<span style = 'color:red' onclick='deleting(this)'>Eliminar</span>";
             celda.appendChild(textoCelda);
             hilera.appendChild(celda);
         
@@ -181,49 +181,122 @@
         location.reload();
         }
         var editando = false;
-    function transformarEnEditable(nodo){
+        
+    function editing(nodo){
      if(editando == false){
          var nodoTd = nodo.parentNode;
          var nodoTr = nodoTd.parentNode;
          var nodoContenedor = document.getElementById('contenedor');
-         var nodosenTr = nodoTr.getElementsByTagName('td');
-         var nom = nodosenTr[0].textContent;
-         var ape = nodosenTr[1].textContent;
-         var dire = nodosenTr[2].textContent;
-         var tel = nodosenTr[3].textContent;
-         var cor = nodosenTr[4].textContent;
+         var nodosTr = nodoTr.getElementsByTagName('td');
+         var nom = nodosTr[0].textContent;
+         var ape = nodosTr[1].textContent;
+         var dire = nodosTr[2].textContent;
+         var tel = nodosTr[3].textContent;
+         var cor = nodosTr[4].textContent;
          var nuevoCodigoHtml = '<td><input type="text" name="nombre" id="nombre" value="'+nom+'" ></td>'+
                                 '<td><input type="text" name="apellidos" id="apellidos" value="'+ape+'" ></td>'+
                                 '<td><input type="text" name="direccion" id="direccion" value="'+dire+'" ></td>'+
                                 '<td><input type="text" name="telefono" id="telefono" value="'+tel+'" ></td>'+
-                                '<td><input type="text" name="correo" id="correo" value="'+cor+'" ></td> <td>En edición</td>';
+                                '<td><input type="text" name="correo" id="correo" value="'+cor+'" readonly ></td> <td>En edición</td>';
         
         nodoTr.innerHTML = nuevoCodigoHtml;
-        nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'+
-                                    '<form name = "formulario" action="update.php" method="post" onsubmit="capturarEnvio()" onreset="anular()">'+
-                                    '<input class="boton" type = "submit" value="Aceptar"> <input class="boton" type="reset" value="Cancelar">';
+
+           nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'  + 
+                                     '<button onclick = "capturarEnvio()">Aceptar</button>'+ '<button onclick = "anular()">Anular</button>';                        
 
                                      editando = "true";
     }
-
 }
+
+
 function capturarEnvio(){
 
-    var nodoContenedor = document.getElementById('contenedor'); //Nodo DIV
-    nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'+
-    '<form name = "formulario" action="update.php" method="post" onsubmit="capturarEnvio()" onreset="anular()">'+
-    '<input type="hidden" name="nombre" value="'+document.querySelector('#nombre').value+'">'+
-    '<input type="hidden" name="apellidos" value="'+document.querySelector('#apellidos').value+'">'+
-    '<input type="hidden" name="direccion" value="'+document.querySelector('#direccion').value+'">'+
-    '<input type="hidden" name="telefono" value="'+document.querySelector('#telefono').value+'">'+
-    '<input type="hidden" name="correo" value="'+document.querySelector('#correo').value+'">'+
-    '<input type = "submit" value="Aceptar"> <input type="reset" value="Cancelar">';
+    var nodoContenedor = document.getElementById('contenedor');
+  
+    var nombre = document.querySelector('#nombre').value;
+    var apellidos = document.querySelector('#apellidos').value;
+    var direccion = document.querySelector('#direccion').value;
+    var telefono = document.querySelector('#telefono').value;
+    var correo = document.querySelector('#correo').value;
+        var newax = new XMLHttpRequest();
+        newax.open("POST","update.php",true);
+        newax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        newax.send ("&nombre="+nombre+"&apellidos="+apellidos+"&direccion="+direccion+"&telefono="+telefono+"&correo="+correo);
+        newax.onreadystatechange = function(){
+            console.log(newax.status);
+            console.log(newax.readyState);
+            if(newax.readyState==4 && newax.status==200){
+                var njson = newax.responseText;
+                var nrespuesta = JSON.parse(njson);
+                console.log(nrespuesta.length);
+                for (x of nrespuesta){
+                    console.log(x.nombre);
+                    nodoContenedor.innerHTML = 
+                                '<input type="text" name="nombre" value="'+x.nombre+'">'+
+                                '<input type="text" name="apellidos" value="'+x.apellidos+'">'+
+                                '<input type="text" name="direccion" value="'+x.direccion+'">'+
+                                '<input type="number" name="telefono" value="'+x.telefono+'">'+
+                                '<input type="email" name="correo" value="'+x.correo+'">';
+                                
+                }
 
-    document.formulario.submit();
-
+                
+                
+                console.log(nrespuesta);
+                
+            }
+        }
     }
-
+   
+    var borrado = false;
+        
+        function deleting(nodo){
+         if(borrado == false){
+             var nodoTd = nodo.parentNode;
+             var nodoTr = nodoTd.parentNode;
+             var nodoContenedor = document.getElementById('contenedor');
+             var nodosTr = nodoTr.getElementsByTagName('td');
+             var nom = nodosTr[0].textContent;
+             var ape = nodosTr[1].textContent;
+             var dire = nodosTr[2].textContent;
+             var tel = nodosTr[3].textContent;
+             var cor = nodosTr[4].textContent;
+             var nuevoCodigoHtml = '<td><input type="text" name="nombre" id="nombre" value="'+nom+'" ></td>'+
+                                    '<td><input type="text" name="apellidos" id="apellidos" value="'+ape+'" ></td>'+
+                                    '<td><input type="text" name="direccion" id="direccion" value="'+dire+'" ></td>'+
+                                    '<td><input type="text" name="telefono" id="telefono" value="'+tel+'" ></td>'+
+                                    '<td><input type="text" name="correo" id="correo" value="'+cor+'" readonly ></td> <td>En edición</td>';
+            
+            nodoTr.innerHTML = nuevoCodigoHtml;
     
+               nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'  + 
+                                         '<button onclick = "del()">Aceptar</button>'+ '<button onclick = "anular()">Anular</button>';                        
+    
+                                         borrando = "true";
+        }
+    }
+    
+    
+    function del(){
+    
+        var nodoContenedor = document.getElementById('contenedor');
+      
+        var nombre = document.querySelector('#nombre').value;
+        var apellidos = document.querySelector('#apellidos').value;
+        var direccion = document.querySelector('#direccion').value;
+        var telefono = document.querySelector('#telefono').value;
+        var correo = document.querySelector('#correo').value;
+            var newax = new XMLHttpRequest();
+            newax.open("POST","del.php",true);
+            newax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            newax.send ("&nombre="+nombre+"&apellidos="+apellidos+"&direccion="+direccion+"&telefono="+telefono+"&correo="+correo);
+            newax.onreadystatechange = function(){
+                console.log(newax.status);
+                console.log(newax.readyState);
+          
+            }
+        }
+       
 
     function anular(){
 

@@ -31,42 +31,39 @@ $sqlejcod = mysqli_query($db_conn,$sqlcod);
 $rescod = mysqli_fetch_array($sqlejcod);
 
 $cod = $rescod['id_id'];
-
+session_start();
+$_SESSION['codigo'] = $cod;
 
 // Actualizando nuevos datos y comprobacion de grabación correcta en BBDD
 
-$up = "UPDATE agenda SET nombre_id = '".$name."' , apellidos_id = '".$surname."', direccion_id = '".$dir."', telefono_id = '".$phone."', email_id = '".$mail."' WHERE id_id = '".$cod."' ";
-$ejup =mysqli_query($db_conn,$up);
-echo "resultados actualizados";
-
-/*if(!mysqli_query($db_conn,"UPDATE agenda SET nombre_id = '".$name."' , apellidos_id = '".$surname."', direccion_id = '".$dir."', telefono_id = '".$phone."', email_id = '".$mail."')  "))
-{send_err(-2,'<p>No es posible insertar los datos</p>');exit; }*/
+if(!mysqli_query($db_conn,"UPDATE agenda SET nombre_id = '".$name."' , apellidos_id = '".$surname."', direccion_id = '".$dir."', telefono_id = '".$phone."', email_id = '".$mail."' WHERE id_id ='".$cod."'"))
+{send_err(-2,'<p>No es posible insertar los datos</p>');exit; }
 
 // Listado datos BBDD sin filtro
-/*$datos = "SELECT * FROM agenda";
+$datos = "SELECT * FROM agenda WHERE id_id ='".$cod."'";
 $consulta = mysqli_query($db_conn, $datos);
 $resultado = mysqli_fetch_array($consulta);
 
 $cadenaJSON = array();
 while($resultado = mysqli_fetch_array($consulta)){
-	$cod = $resultado['id_id'];
+	
 	$name=$resultado['nombre_id'];
 	$surname=$resultado['apellidos_id'];
 	$dir=$resultado['direccion_id'];
 	$phone=$resultado['telefono_id'];
 	$mail=$resultado['email_id'];
 	
-	$cadenaJSON[]=array("cod"=>$cod,"name"=>$name,"surname"=>$surname,"direction"=>$dir,"phone"=>$phone,"mail"=>$mail);
+	$cadenaJSON[]=array("name"=>$name,"surname"=>$surname,"direction"=>$dir,"phone"=>$phone,"mail"=>$mail);
 } 
 //Creando JSON
 $jsonObj = json_encode($cadenaJSON);
 //echo $jsonObj;
 die(json_encode($cadenaJSON));
 //cerrando variables y conexiones
-mysqli_free_result($consulta);
-unset($_POST,$db_conn,$resultado);
+mysqli_free_result($consulta,$sqlejcod);
+unset($_POST,$db_conn,$resultado,$rescod);
 mysqli_close($db_conn);
-//*/
-//exit;//end of file
+//
+exit;//end of file
 
 ?>
