@@ -2,14 +2,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-		
+		<title>Ejercicio con AJAX,PHP y JAVASCRIPT NATIVO</title>
 		<link rel="stylesheet" href="../css/estilo.css" type="text/css" media="screen">
 		
 		
 	</head>
 	<body>
 		<p><a href="../../index.html">Volver a inicio</a></p>
-	<div id = "form">
+	<div id = "create">
 	<label>ALTAS AGENDA</label>
 		<p>Introduce datos</p>
 		<p>Nombre: <input type="text" name="name" id="name" placeholder="Introduce nombre" ></p>
@@ -19,10 +19,28 @@
 		<p>Email: <input type="email" name="mail" id="mail" placeholder="Introduce email" ></p>	
         <p><button onclick="enviar_formulario()">Enviar</button></p>
         <p><button onclick="clean()">Limpiar</button></p>
+        <div id="contenedora"></div>
+        <div id="resultado"></div>
+    </div>
+    <div id="read" >
+        <label>CONSULTAS</label>
+        <div id = "uno"><p><button id = "boton" onclick="ver_tabla()">Ver tabla</button></p></div>
+        <div id = "dos">
+            <p>Introduce email : <input type = "email" id = "rmail" name = "rmail" placeholder="Introduce email"></p>
+            <p><button id = "boton" onclick="ver_registro()">Busqueda por Registro</button></p>
+        </div>
+        
+        
+    </div>
+    <div id="update">
+        <div id="contenedor"></div>
+    </div>
+    <div id="delete">
+        <div id="contenedorb"></div>
+
     </div>
     
-    <div id="resultado"></div>
-    <div id="contenedor"></div>
+    
 <script type="text/javascript" language="javascript">
 
 
@@ -36,7 +54,7 @@
                 
                 
             var ajax = new XMLHttpRequest();/*la variable ajax es un objeto tipo XMLHttpRequest*/
-            ajax.open("POST", "datos.php", true);/*enviaremos por post los datos,al archivo php, por lo que en action del formulario ya no es necesario ponerlo y el true significa que es asincrono*/
+            ajax.open("POST", "config/create.php", true);/*enviaremos por post los datos,al archivo php, por lo que en action del formulario ya no es necesario ponerlo y el true significa que es asincrono*/
             ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
             ajax.send("&name="+name+"&surname="+surname+"&dir="+dir+"&phone="+phone+"&mail="+mail);/*en esta parte enviaras tus datos, en donde los que van 
             entre comillas sera el nombre que tendra el valor del dato al que le estas concatenando, si quieres añadir mas datos tendras que poner el amperson y el nombre de la variable
@@ -50,17 +68,72 @@
                 /*aqui si ajax.status es igual al codigo de estado, significa que la peticion se ha enviado correctamente y el readyState ==4 
                 significa que el servidor termino de devolver la respuesta*/ 
                  var jsonResponse = ajax.responseText;
-                 //var respuesta = JSON.stringify(jsonResponse);
-                 var respuesta=JSON.parse(jsonResponse);
-                    //console.log(respuesta);
-                    genera_tabla(respuesta);
+                var respuesta = JSON.stringify(jsonResponse);
+                 //var respuesta=JSON.parse(jsonResponse);
+                    console.log(respuesta);
+                   // genera_tabla(respuesta);
+                    var alerta = document.getElementById('contenedora').innerHTML = '<p>Nuevo registro grabado</p>';
+                  
                     
                 } 
             }	
             
         }
     
-            // Obtener la referencia del elemento body
+    function ver_tabla(){
+        var name = '';
+            var surname = '';
+            var dir = '';
+            var phone = '';
+            var mail = '';
+        var ajaxread = new XMLHttpRequest();
+        ajaxread.open("POST","config/read.php", true);
+        ajaxread.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        ajaxread.send("&name="+name+"&surname="+surname+"&dir="+dir+"&phone="+phone+"&mail="+mail);
+        ajaxread.onreadystatechange = function(){
+            console.log(ajaxread.status);
+            console.log(ajaxread.readyState);
+            if(ajaxread.readyState == 4 && ajaxread.status == 200){
+                var jsonRead = ajaxread.responseText;
+                console.log(jsonRead);
+                //var consulta=JSON.stringify(jsonRead);
+                var consulta = JSON.parse(jsonRead);
+                genera_tabla(consulta);
+
+            }
+        }
+    }  
+    
+    function ver_registro(){
+        var mail = document.getElementById('rmail');
+        var ajaxreg = new XMLHttpRequest();
+        ajaxreg.open("POST","config/read.php", true);
+        ajaxreg.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        ajaxreg.send("&mail="+mail);
+        ajaxreg.onreadystatechange = function(){
+            console.log(ajaxreg.status);
+            console.log(ajaxreg.readyState);
+            if(ajaxreg.readyState == 4 && ajaxreg.status == 200){
+                var jsoncon = ajaxreg.responseText;
+                console.log(jsoncon);
+                var con=JSON.stringify(jsoncon);
+                //var con = JSON.parse(jsoncon);
+                ver_tabla(con);
+                
+
+            }
+        }
+
+
+    }
+    
+    function genera_tabla(data) {
+    
+    if(data[0].code < 0){
+    //console.log(data.length);
+    var errores = resultado.innerHTML = data[0].message;
+    }else{
+                 // Obtener la referencia del elemento body
       var body = document.getElementsByTagName("body")[0];
       // Crea un elemento <table> y un elemento <tbody>
       var tabla   = document.createElement("table");
@@ -95,16 +168,6 @@
             
             tblheader.appendChild(cabecera);
         
-            
-      // Crea las celdas
-    
-    
-    function genera_tabla(data) {
-    
-    if(data[0].code < 0){
-    //console.log(data.length);
-    var errores = resultado.innerHTML = data[0].message;
-    }else{
     
       for (var i = 0; i < data.length; i++) {
         // Crea las hileras de la tabla
@@ -202,7 +265,7 @@
         nodoTr.innerHTML = nuevoCodigoHtml;
 
            nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'  + 
-                                     '<button onclick = "capturarEnvio()">Aceptar</button>'+ '<button onclick = "anular()">Anular</button>';                        
+                                     '<button onclick = "capturarEnvio()">Aceptar</button>' + '<button onclick = "anular()">Anular</button>';                        
 
                                      editando = "true";
     }
@@ -219,18 +282,18 @@ function capturarEnvio(){
     var telefono = document.querySelector('#telefono').value;
     var correo = document.querySelector('#correo').value;
         var newax = new XMLHttpRequest();
-        newax.open("POST","update.php",true);
+        newax.open("POST","config/update.php",true);
         newax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         newax.send ("&nombre="+nombre+"&apellidos="+apellidos+"&direccion="+direccion+"&telefono="+telefono+"&correo="+correo);
         newax.onreadystatechange = function(){
-            console.log(newax.status);
-            console.log(newax.readyState);
+            //console.log(newax.status);
+            //console.log(newax.readyState);
             if(newax.readyState==4 && newax.status==200){
                 var njson = newax.responseText;
                 var nrespuesta = JSON.parse(njson);
-                console.log(nrespuesta.length);
+               // var nrespuesta = JSON.stringify(njson);
                 for (x of nrespuesta){
-                    console.log(x.nombre);
+               
                     nodoContenedor.innerHTML = 
                                 '<input type="text" name="nombre" value="'+x.nombre+'">'+
                                 '<input type="text" name="apellidos" value="'+x.apellidos+'">'+
@@ -240,10 +303,8 @@ function capturarEnvio(){
                                 
                 }
 
-                
-                
                 console.log(nrespuesta);
-                
+                anular(nrespuesta);
             }
         }
     }
@@ -254,7 +315,7 @@ function capturarEnvio(){
          if(borrado == false){
              var nodoTd = nodo.parentNode;
              var nodoTr = nodoTd.parentNode;
-             var nodoContenedor = document.getElementById('contenedor');
+             var nodoContenedorb = document.getElementById('contenedorb');
              var nodosTr = nodoTr.getElementsByTagName('td');
              var nom = nodosTr[0].textContent;
              var ape = nodosTr[1].textContent;
@@ -265,21 +326,22 @@ function capturarEnvio(){
                                     '<td><input type="text" name="apellidos" id="apellidos" value="'+ape+'" ></td>'+
                                     '<td><input type="text" name="direccion" id="direccion" value="'+dire+'" ></td>'+
                                     '<td><input type="text" name="telefono" id="telefono" value="'+tel+'" ></td>'+
-                                    '<td><input type="text" name="correo" id="correo" value="'+cor+'" readonly ></td> <td>En edición</td>';
+                                    '<td><input type="text" name="correo" id="correo" value="'+cor+'" readonly ></td> <td>Eliminando</td>';
             
             nodoTr.innerHTML = nuevoCodigoHtml;
+            
     
-               nodoContenedor.innerHTML = 'Pulse Aceptar para guardar los cambios o cancelar para anularlos'  + 
+               nodoContenedorb.innerHTML = 'Pulse Aceptar para eliminar el registro o cancelar para anular la accion'  + 
                                          '<button onclick = "del()">Aceptar</button>'+ '<button onclick = "anular()">Anular</button>';                        
     
-                                         borrando = "true";
+                                         borrado = "true";
         }
     }
     
     
     function del(){
     
-        var nodoContenedor = document.getElementById('contenedor');
+        var nodoContenedorb = document.getElementById('contenedorb');
       
         var nombre = document.querySelector('#nombre').value;
         var apellidos = document.querySelector('#apellidos').value;
@@ -287,12 +349,24 @@ function capturarEnvio(){
         var telefono = document.querySelector('#telefono').value;
         var correo = document.querySelector('#correo').value;
             var newax = new XMLHttpRequest();
-            newax.open("POST","del.php",true);
+            newax.open("POST","config/delete.php",true);
             newax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             newax.send ("&nombre="+nombre+"&apellidos="+apellidos+"&direccion="+direccion+"&telefono="+telefono+"&correo="+correo);
             newax.onreadystatechange = function(){
                 console.log(newax.status);
                 console.log(newax.readyState);
+                if(newax.readyState==4 && newax.status==200){
+                var njson = newax.responseText;
+                //var nrespuesta = JSON.stringify(njson);
+                var nrespuesta = JSON.parse(njson);
+                console.log(nrespuesta.length);
+                for (x of nrespuesta){
+                    console.log(x.nombre);
+                    nodoContenedorb.innerHTML = "<p>REGISTRO ELIMINADO</p>";
+                    
+                }
+                anular(nrespuesta);
+            }
           
             }
         }

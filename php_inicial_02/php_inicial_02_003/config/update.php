@@ -1,8 +1,8 @@
 <?php
 
 // Realizando conexion con BBDD
-include_once("../dB_conexion/conexion.php");
-include_once("../utilities/helper.php");
+include_once("../../dB_conexion/conexion.php");
+include_once("../../utilities/helper.php");
 
 //VALIDACION DATOS LADO SERVIDOR
 
@@ -31,8 +31,7 @@ $sqlejcod = mysqli_query($db_conn,$sqlcod);
 $rescod = mysqli_fetch_array($sqlejcod);
 
 $cod = $rescod['id_id'];
-session_start();
-$_SESSION['codigo'] = $cod;
+
 
 // Actualizando nuevos datos y comprobacion de grabación correcta en BBDD
 

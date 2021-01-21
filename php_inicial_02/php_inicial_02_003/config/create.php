@@ -1,8 +1,8 @@
 <?php
 
 // Realizando conexion con BBDD
-include_once("../dB_conexion/conexion.php");
-include_once("../utilities/helper.php");
+include_once("../../dB_conexion/conexion.php");
+include_once("../../utilities/helper.php");
 //VALIDACION DATOS LADO SERVIDOR
 
 $error ='';
@@ -16,13 +16,22 @@ if(empty($_POST['surname'])){$error.= '<p>El campo apellidos no puede estar vac�
 if(empty($_POST['dir'])){$error.= '<p>El campo dirección no puede estar vacío</p>';}
 if(empty($_POST['phone'])){$error.= '<p>El campo teléfono no puede estar vacío</p>';}
 if(empty($_POST['mail'])){$error.= '<p>El campo email no puede estar vacío</p>';}
-if(!empty($error)){send_err(-1,$error);exit;}
+
 
 $name = $_POST['name'];
 $surname = $_POST['surname'];
 $dir = $_POST['dir'];
 $phone = $_POST['phone'];
 $mail = $_POST['mail'];
+
+$cmail = "SELECT * FROM agenda WHERE email_id = '".$mail."'";
+$ccmail = mysqli_query($db_conn,$cmail);
+$rcmail = mysqli_fetch_array($ccmail);
+$mailc = $rcmail['email_id'];
+if($mail == $mailc){$error.='<p>El usuario con este email, ya existe. Introduzca otro email o modifique el correo del otro usuario</p>';}
+if(!empty($error)){send_err(-1,$error);exit;}
+
+
 
 // Grabando nuevos datos y comprobacion de grabación correcta en BBDD
 
@@ -35,17 +44,19 @@ if(!mysqli_query($db_conn,"INSERT INTO agenda (nombre_id, apellidos_id, direccio
 $datos = "SELECT * FROM agenda";
 $consulta = mysqli_query($db_conn, $datos);
 $resultado = mysqli_fetch_array($consulta);
-
+$cod = $resultado['id_id'];
+session_start();
+$_SESSION['codigo'] = $cod;
 $cadenaJSON = array();
 while($resultado = mysqli_fetch_array($consulta)){
-	$cod = $resultado['id_id'];
+	
 	$name=$resultado['nombre_id'];
 	$surname=$resultado['apellidos_id'];
 	$dir=$resultado['direccion_id'];
 	$phone=$resultado['telefono_id'];
 	$mail=$resultado['email_id'];
 	
-	$cadenaJSON[]=array("cod"=>$cod,"name"=>$name,"surname"=>$surname,"direction"=>$dir,"phone"=>$phone,"mail"=>$mail);
+	$cadenaJSON[]=array("name"=>$name,"surname"=>$surname,"direction"=>$dir,"phone"=>$phone,"mail"=>$mail);
 } 
 //Creando JSON
 
